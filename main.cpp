@@ -9,7 +9,7 @@ using namespace sf;
 int width = 800;
 int height = 600;
 sf::Color gray(105,105,105);
-int in0 = 0, in1 = 100, in2 = 200, in3 = 300, in4 = 400, in5 = 500;
+int in[6] = {0,100,200,300,400,500};
 int velocity = 5;
 int trackW = 90, segW = 12;
 int obsP[6] = {0,0,0,0,0,0};
@@ -38,9 +38,15 @@ class Car {
                 spr.setPosition(x, y);
             }
         }
+        void setX(int x) {
+            this->x = x;
+        }
+        void setY(int y) {
+            this->y = y;
+        }
         void setxy(int x, int y) {
-            this->x=x;
-            this->y=y;
+            setX(x);
+            setY(y);
         }
         int getX() {
             return x;
@@ -61,24 +67,23 @@ class PlayerCar: public Car {
 
 class ObstacleCar: public Car {
     public:
-        ObstacleCar(int x=115, int y=height-100): Car(x, y) {
-            srand (time(NULL));
-            int type = rand()%5 + 1;
+        ObstacleCar(int x=115, int y=100, int t=0): Car(x,y) {
             std::stringstream ss;
-            ss << type;
+            ss << t;
             tex.loadFromFile("resources/"+ss.str()+".png");
             spr.setTexture(tex, true);
+            setxy(x, y);
             spr.setPosition(x, y);
         }
         void move() {
-
+            setY(getY() + velocity);
         }
 };
 
-void moveSeg(int &x) {
-    x += velocity;
-    if (x>height) {
-        x -= height;
+void moveSeg(int &y) {
+    y += velocity;
+    if (y>height) {
+        y -= height;
     }
 }
 
@@ -95,12 +100,17 @@ void drawQuad(RenderWindow &w, Color c, int x1, int y1, int x2, int y2)
 
 int main(void)
 {
+    srand (time(NULL));
     RenderWindow app(VideoMode(width, height), "Car Game");
     app.setFramerateLimit(60);
     app.setKeyRepeatEnabled(false);
 
+    // Instantiate player's car
     PlayerCar pCar;
 
+    // Instantiate pointer for obstacle car
+
+    // Score show Start
     sf::Font font;
     if (!font.loadFromFile("resources/arial.ttf"))
     {
@@ -112,6 +122,8 @@ int main(void)
     text.setStyle(sf::Text::Bold | sf::Text::Underlined);
     text.setFillColor(sf::Color::White);
     text.setPosition(345,10);
+
+    // Score show End
 
     while(app.isOpen() && !Keyboard::isKeyPressed(Keyboard::Escape))
     {
@@ -127,34 +139,34 @@ int main(void)
         drawQuad(app, Color::Green, 100, 0, 700, height);
 
         for (int i=0; i<5; i++) {
-            drawQuad(app, gray, 100+trackW+((trackW+segW)*i), in0, 100+trackW+segW+((trackW+segW)*i), in0+50);
+            drawQuad(app, gray, 100+trackW+((trackW+segW)*i), in[0], 100+trackW+segW+((trackW+segW)*i), in[0]+50);
         }
-        moveSeg(in0);
+        moveSeg(in[0]);
 
         for (int i=0; i<5; i++) {
-            drawQuad(app, gray, 100+trackW+((trackW+segW)*i), in1, 100+trackW+segW+((trackW+segW)*i), in1+50);
+            drawQuad(app, gray, 100+trackW+((trackW+segW)*i), in[1], 100+trackW+segW+((trackW+segW)*i), in[1]+50);
         }
-        moveSeg(in1);
+        moveSeg(in[1]);
 
         for (int i=0; i<5; i++) {
-            drawQuad(app, gray, 100+trackW+((trackW+segW)*i), in2, 100+trackW+segW+((trackW+segW)*i), in2+50);
+            drawQuad(app, gray, 100+trackW+((trackW+segW)*i), in[2], 100+trackW+segW+((trackW+segW)*i), in[2]+50);
         }
-        moveSeg(in2);
+        moveSeg(in[2]);
 
         for (int i=0; i<5; i++) {
-            drawQuad(app, gray, 100+trackW+((trackW+segW)*i), in3, 100+trackW+segW+((trackW+segW)*i), in3+50);
+            drawQuad(app, gray, 100+trackW+((trackW+segW)*i), in[3], 100+trackW+segW+((trackW+segW)*i), in[3]+50);
         }
-        moveSeg(in3);
+        moveSeg(in[3]);
 
         for (int i=0; i<5; i++) {
-            drawQuad(app, gray, 100+trackW+((trackW+segW)*i), in4, 100+trackW+segW+((trackW+segW)*i), in4+50);
+            drawQuad(app, gray, 100+trackW+((trackW+segW)*i), in[4], 100+trackW+segW+((trackW+segW)*i), in[4]+50);
         }
-        moveSeg(in4);
+        moveSeg(in[4]);
 
         for (int i=0; i<5; i++) {
-            drawQuad(app, gray, 100+trackW+((trackW+segW)*i), in5, 100+trackW+segW+((trackW+segW)*i), in5+50);
+            drawQuad(app, gray, 100+trackW+((trackW+segW)*i), in[5], 100+trackW+segW+((trackW+segW)*i), in[5]+50);
         }
-        moveSeg(in5);
+        moveSeg(in[5]);
 
         if (Keyboard::isKeyPressed(Keyboard::Right)) {
 			pCar.moveRight();
