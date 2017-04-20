@@ -9,32 +9,13 @@ int in0 = 0, in1 = 100, in2 = 200, in3 = 300, in4 = 400, in5 = 500;
 int velocity = 5;
 int trackW = 90, segW = 12;
 
-class Point {
-public:
-    int x;
-    int y;
-    Point(int x, int y) {
-        this->x = x;
-        this->y = y;
-    }
-    void moveRight() {
-        if (x < 640) {
-            x += 10;
-        }
-    }
-    void moveLeft() {
-        if (x >= 110) {
-            x -= 10;
-        }
-    }
-};
-
 class Car {
     private:
         int x;
         int y;
     public:
-        sf::Image img;
+        sf::Texture tex;
+        sf::Sprite spr;
         Car(int x, int y) {
             this->x = x;
             this->y = y;
@@ -42,11 +23,13 @@ class Car {
         void moveRight() {
             if (x < 640) {
                 x += 10;
+                spr.setPosition(x, y);
             }
         }
         void moveLeft() {
             if (x >= 110) {
                 x -= 10;
+                spr.setPosition(x, y);
             }
         }
         void setxy(int x, int y) {
@@ -62,9 +45,12 @@ class Car {
 };
 
 class PlayerCar: public Car {
-    PlayerCar(int x=115, int y=height-100): Car(x, y) {
-        img.loadFromFile("resources/playercar.png");
-    }
+    public:
+        PlayerCar(int x=115, int y=height-100): Car(x, y) {
+            tex.loadFromFile("resources/playercar.png");
+            spr.setTexture(tex, true);
+            spr.setPosition(x, y);
+        }
 };
 
 void moveSeg(int &x) {
@@ -91,18 +77,8 @@ int main(void)
     app.setFramerateLimit(60);
     app.setKeyRepeatEnabled(false);
 
-    sf::Image img;
-    if (!img.loadFromFile("resources/playercar.png"))
-    {
-        return 1;
-    }
+    PlayerCar pCar;
 
-    sf::Texture texture;
-    texture.loadFromImage(img);
-    sf::Sprite pCar;
-    pCar.setTexture(texture, true);
-
-    Point playerPoint(115, height-100);
     while(app.isOpen() && !Keyboard::isKeyPressed(Keyboard::Escape))
     {
         Event e;
@@ -147,13 +123,12 @@ int main(void)
         moveSeg(in5);
 
         if (Keyboard::isKeyPressed(Keyboard::Right)) {
-			playerPoint.moveRight();
+			pCar.moveRight();
         } else if (Keyboard::isKeyPressed(Keyboard::Left)) {
-            playerPoint.moveLeft();
+            pCar.moveLeft();
         }
 
-        pCar.setPosition(Vector2f(playerPoint.x, playerPoint.y));
-        app.draw(pCar);
+        app.draw(pCar.spr);
 
         app.display();
     }
