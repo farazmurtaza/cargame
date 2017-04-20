@@ -126,6 +126,24 @@ int main(void)
         }
         moveSeg(in5);
 
+        sf::Image img;
+        if (!img.loadFromFile("resources/playercar.png"))
+        {
+            return 1;
+        }
+
+
+        sf::Texture texture;
+        texture.loadFromImage(img);
+        sf::Sprite pCar;
+        pCar.setPosition(Vector2f(115, height-150));
+        pCar.setTexture(texture, true);
+
+        app.draw(pCar);
+
+//        sf::Sprite pCar;
+//        pCar.
+
         app.display();
     }
     return 0;
