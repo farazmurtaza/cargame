@@ -12,6 +12,13 @@ int velocity = 5;
 
 using namespace sf;
 
+void moveSeg(int &x) {
+    x += velocity;
+    if (x>height) {
+        x -= height;
+    }
+}
+
 struct Line
 {
     float x,y,z; //3d center of line
@@ -89,65 +96,35 @@ int main(void)
         app.clear();
         drawQuad(app, Color::Green, 100, 0, 700, height);
 
-        drawQuad(app, gray, 208, in0, 223, in0+50);
-        drawQuad(app, gray, 331, in0, 346, in0+50);
-        drawQuad(app, gray, 454, in0, 469, in0+50);
-        drawQuad(app, gray, 577, in0, 592, in0+50);
-        in0 += velocity;
-        if (in0>height)
-        {
-            in0 -=height;
+        for (int i=0; i<4; i++) {
+            drawQuad(app, gray, 208+(123*i), in0, 223+(123*i), in0+50);
         }
+        moveSeg(in0);
 
-        drawQuad(app, gray, 208, in1, 223, in1+50);
-        drawQuad(app, gray, 331, in1, 346, in1+50);
-        drawQuad(app, gray, 454, in1, 469, in1+50);
-        drawQuad(app, gray, 577, in1, 592, in1+50);
-        in1 += velocity;
-        if (in1>height)
-        {
-            in1 -=height;
+        for (int i=0; i<4; i++) {
+            drawQuad(app, gray, 208+(123*i), in1, 223+(123*i), in1+50);
         }
+        moveSeg(in1);
 
-        drawQuad(app, gray, 208, in2, 223, in2+50);
-        drawQuad(app, gray, 331, in2, 346, in2+50);
-        drawQuad(app, gray, 454, in2, 469, in2+50);
-        drawQuad(app, gray, 577, in2, 592, in2+50);
-        in2 += velocity;
-        if (in2>height)
-        {
-            in2 -=height;
+        for (int i=0; i<4; i++) {
+            drawQuad(app, gray, 208+(123*i), in2, 223+(123*i), in2+50);
         }
+        moveSeg(in2);
 
-        drawQuad(app, gray, 208, in3, 223, in3+50);
-        drawQuad(app, gray, 331, in3, 346, in3+50);
-        drawQuad(app, gray, 454, in3, 469, in3+50);
-        drawQuad(app, gray, 577, in3, 592, in3+50);
-        in3 += velocity;
-        if (in3>height)
-        {
-            in3 -=height;
+        for (int i=0; i<4; i++) {
+            drawQuad(app, gray, 208+(123*i), in3, 223+(123*i), in3+50);
         }
+        moveSeg(in3);
 
-        drawQuad(app, gray, 208, in4, 223, in4+50);
-        drawQuad(app, gray, 331, in4, 346, in4+50);
-        drawQuad(app, gray, 454, in4, 469, in4+50);
-        drawQuad(app, gray, 577, in4, 592, in4+50);
-        in4 += velocity;
-        if (in4>height)
-        {
-            in4 -=height;
+        for (int i=0; i<4; i++) {
+            drawQuad(app, gray, 208+(123*i), in4, 223+(123*i), in4+50);
         }
+        moveSeg(in4);
 
-        drawQuad(app, gray, 208, in5, 223, in5+50);
-        drawQuad(app, gray, 331, in5, 346, in5+50);
-        drawQuad(app, gray, 454, in5, 469, in5+50);
-        drawQuad(app, gray, 577, in5, 592, in5+50);
-        in5 += velocity;
-        if (in5>height)
-        {
-            in5 -=height;
+        for (int i=0; i<4; i++) {
+            drawQuad(app, gray, 208+(123*i), in5, 223+(123*i), in5+50);
         }
+        moveSeg(in5);
 
         app.display();
     }
