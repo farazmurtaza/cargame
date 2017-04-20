@@ -1,5 +1,9 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
+#include <cstdlib>
+#include <sstream>
+#include <string>
 
 using namespace sf;
 int width = 800;
@@ -8,6 +12,8 @@ sf::Color gray(105,105,105);
 int in0 = 0, in1 = 100, in2 = 200, in3 = 300, in4 = 400, in5 = 500;
 int velocity = 5;
 int trackW = 90, segW = 12;
+int obsP[6] = {0,0,0,0,0,0};
+sf::Clock c;
 
 class Car {
     private:
@@ -53,6 +59,23 @@ class PlayerCar: public Car {
         }
 };
 
+class ObstacleCar: public Car {
+    public:
+        ObstacleCar(int x=115, int y=height-100): Car(x, y) {
+            srand (time(NULL));
+            int type = rand()%5 + 1;
+            std::stringstream ss;
+            ss << type;
+            tex.loadFromFile("resources/"+ss.str()+".png");
+            std::cout<<"resources/"+ss.str()+".png"<<std::endl;
+            spr.setTexture(tex, true);
+            spr.setPosition(x, y);
+        }
+        void move() {
+
+        }
+};
+
 void moveSeg(int &x) {
     x += velocity;
     if (x>height) {
@@ -78,6 +101,17 @@ int main(void)
     app.setKeyRepeatEnabled(false);
 
     PlayerCar pCar;
+
+    sf::Font font;
+    if (!font.loadFromFile("resources/arial.ttf"))
+    {
+        return 1;
+    }
+    sf::Text text;
+    text.setFont(font);
+    text.setCharacterSize(24);
+    text.setFillColor(sf::Color::White);
+    text.setPosition(345,10);
 
     while(app.isOpen() && !Keyboard::isKeyPressed(Keyboard::Escape))
     {
@@ -127,9 +161,12 @@ int main(void)
         } else if (Keyboard::isKeyPressed(Keyboard::Left)) {
             pCar.moveLeft();
         }
-
         app.draw(pCar.spr);
-
+        sf::Time t = c.getElapsedTime();
+        std::stringstream ss;
+        ss << (int)t.asSeconds();
+        text.setString("Score: "+ss.str());
+        app.draw(text);
         app.display();
     }
     return 0;
