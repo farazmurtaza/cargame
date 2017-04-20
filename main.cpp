@@ -7,6 +7,7 @@ int height = 600;
 sf::Color gray(105,105,105);
 int in0 = 0, in1 = 100, in2 = 200, in3 = 300, in4 = 400, in5 = 500;
 int velocity = 5;
+int trackW = 90, segW = 12;
 
 class Point {
 public:
@@ -77,33 +78,33 @@ int main(void)
         app.clear();
         drawQuad(app, Color::Green, 100, 0, 700, height);
 
-        for (int i=0; i<4; i++) {
-            drawQuad(app, gray, 208+(123*i), in0, 223+(123*i), in0+50);
+        for (int i=0; i<5; i++) {
+            drawQuad(app, gray, 100+trackW+((trackW+segW)*i), in0, 100+trackW+segW+((trackW+segW)*i), in0+50);
         }
         moveSeg(in0);
 
-        for (int i=0; i<4; i++) {
-            drawQuad(app, gray, 208+(123*i), in1, 223+(123*i), in1+50);
+        for (int i=0; i<5; i++) {
+            drawQuad(app, gray, 100+trackW+((trackW+segW)*i), in1, 100+trackW+segW+((trackW+segW)*i), in1+50);
         }
         moveSeg(in1);
 
-        for (int i=0; i<4; i++) {
-            drawQuad(app, gray, 208+(123*i), in2, 223+(123*i), in2+50);
+        for (int i=0; i<5; i++) {
+            drawQuad(app, gray, 100+trackW+((trackW+segW)*i), in2, 100+trackW+segW+((trackW+segW)*i), in2+50);
         }
         moveSeg(in2);
 
-        for (int i=0; i<4; i++) {
-            drawQuad(app, gray, 208+(123*i), in3, 223+(123*i), in3+50);
+        for (int i=0; i<5; i++) {
+            drawQuad(app, gray, 100+trackW+((trackW+segW)*i), in3, 100+trackW+segW+((trackW+segW)*i), in3+50);
         }
         moveSeg(in3);
 
-        for (int i=0; i<4; i++) {
-            drawQuad(app, gray, 208+(123*i), in4, 223+(123*i), in4+50);
+        for (int i=0; i<5; i++) {
+            drawQuad(app, gray, 100+trackW+((trackW+segW)*i), in4, 100+trackW+segW+((trackW+segW)*i), in4+50);
         }
         moveSeg(in4);
 
-        for (int i=0; i<4; i++) {
-            drawQuad(app, gray, 208+(123*i), in5, 223+(123*i), in5+50);
+        for (int i=0; i<5; i++) {
+            drawQuad(app, gray, 100+trackW+((trackW+segW)*i), in5, 100+trackW+segW+((trackW+segW)*i), in5+50);
         }
         moveSeg(in5);
 
