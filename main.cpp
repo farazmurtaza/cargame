@@ -12,9 +12,19 @@ class Point {
 public:
     int x;
     int y;
-    Point() {
-        x = 115;
-        y = height-150;
+    Point(int x, int y) {
+        this->x = x;
+        this->y = y;
+    }
+    void moveRight() {
+        if (x < 640) {
+            x += 10;
+        }
+    }
+    void moveLeft() {
+        if (x >= 110) {
+            x -= 10;
+        }
     }
 };
 
@@ -40,10 +50,21 @@ int main(void)
 {
     RenderWindow app(VideoMode(width, height), "Car Game");
     app.setFramerateLimit(60);
+    app.setKeyRepeatEnabled(false);
 
-    Point playerPoint;
+    sf::Image img;
+    if (!img.loadFromFile("resources/playercar.png"))
+    {
+        return 1;
+    }
 
-    while(app.isOpen())
+    sf::Texture texture;
+    texture.loadFromImage(img);
+    sf::Sprite pCar;
+    pCar.setTexture(texture, true);
+
+    Point playerPoint(115, height-100);
+    while(app.isOpen() && !Keyboard::isKeyPressed(Keyboard::Escape))
     {
         Event e;
         while (app.pollEvent(e))
@@ -86,22 +107,13 @@ int main(void)
         }
         moveSeg(in5);
 
-        sf::Image img;
-        if (!img.loadFromFile("resources/playercar.png"))
-        {
-            return 1;
+        if (Keyboard::isKeyPressed(Keyboard::Right)) {
+			playerPoint.moveRight();
+        } else if (Keyboard::isKeyPressed(Keyboard::Left)) {
+            playerPoint.moveLeft();
         }
 
-        sf::Texture texture;
-        texture.loadFromImage(img);
-        sf::Sprite pCar;
-        if (Keyboard::isKeyPressed(Keyboard::Right)) {
-            playerPoint.x += 108;
-        } else if (Keyboard::isKeyPressed(Keyboard::Left)) {
-            playerPoint.x -= 108;
-        }
         pCar.setPosition(Vector2f(playerPoint.x, playerPoint.y));
-        pCar.setTexture(texture, true);
         app.draw(pCar);
 
         app.display();
