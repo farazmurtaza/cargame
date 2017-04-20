@@ -9,7 +9,6 @@ int height = 600;
 sf::Color gray(105,105,105);
 int in0 = 0, in1 = 100, in2 = 200, in3 = 300, in4 = 400, in5 = 500;
 int velocity = 5;
-int flag=20;
 
 using namespace sf;
 
@@ -90,23 +89,6 @@ int main(void)
         app.clear();
         drawQuad(app, Color::Green, 100, 0, 700, height);
 
-//
-//        if(flag<=20){
-//            drawQuad(app, gray, 208, 0, 223, 25);
-//            drawQuad(app, gray, 223+108, 0, 223+108+15, 25);
-//            drawQuad(app, gray, 223+108+108, 0, 223+108+108+15, 25);
-//            drawQuad(app, gray, 208, 0, 223, 25);
-//            drawQuad(app, gray, 208, 0, 223, 25);
-//            flag--;
-//            if(flag==0){
-//                flag=30;
-//            }
-//        }else{
-//            flag--;
-//        }
-
-
-
         drawQuad(app, gray, 208, in0, 223, in0+50);
         drawQuad(app, gray, 331, in0, 346, in0+50);
         drawQuad(app, gray, 454, in0, 469, in0+50);
@@ -166,8 +148,8 @@ int main(void)
         {
             in5 -=height;
         }
+
         app.display();
     }
-
     return 0;
 }
