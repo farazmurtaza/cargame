@@ -67,7 +67,6 @@ class ObstacleCar: public Car {
             std::stringstream ss;
             ss << type;
             tex.loadFromFile("resources/"+ss.str()+".png");
-            std::cout<<"resources/"+ss.str()+".png"<<std::endl;
             spr.setTexture(tex, true);
             spr.setPosition(x, y);
         }
@@ -110,6 +109,7 @@ int main(void)
     sf::Text text;
     text.setFont(font);
     text.setCharacterSize(24);
+    text.setStyle(sf::Text::Bold | sf::Text::Underlined);
     text.setFillColor(sf::Color::White);
     text.setPosition(345,10);
 
