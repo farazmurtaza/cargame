@@ -29,6 +29,44 @@ public:
     }
 };
 
+class Car {
+    private:
+        int x;
+        int y;
+    public:
+        sf::Image img;
+        Car(int x, int y) {
+            this->x = x;
+            this->y = y;
+        }
+        void moveRight() {
+            if (x < 640) {
+                x += 10;
+            }
+        }
+        void moveLeft() {
+            if (x >= 110) {
+                x -= 10;
+            }
+        }
+        void setxy(int x, int y) {
+            this->x=x;
+            this->y=y;
+        }
+        int getX() {
+            return x;
+        }
+        int getY() {
+            return y;
+        }
+};
+
+class PlayerCar: public Car {
+    PlayerCar(int x=115, int y=height-100): Car(x, y) {
+        img.loadFromFile("resources/playercar.png");
+    }
+};
+
 void moveSeg(int &x) {
     x += velocity;
     if (x>height) {
