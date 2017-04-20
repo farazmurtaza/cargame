@@ -1,16 +1,22 @@
 #include <SFML/Graphics.hpp>
-#include <cmath>
 #include <iostream>
-#include <sstream>
-#include <string>
 
+using namespace sf;
 int width = 800;
 int height = 600;
 sf::Color gray(105,105,105);
 int in0 = 0, in1 = 100, in2 = 200, in3 = 300, in4 = 400, in5 = 500;
 int velocity = 5;
 
-using namespace sf;
+class Point {
+public:
+    int x;
+    int y;
+    Point() {
+        x = 115;
+        y = height-150;
+    }
+};
 
 void moveSeg(int &x) {
     x += velocity;
@@ -18,52 +24,6 @@ void moveSeg(int &x) {
         x -= height;
     }
 }
-
-struct Line
-{
-    float x,y,z; //3d center of line
-    float X,Y,W; //screen coord
-    float curve,spriteX,clip,scale;
-    Sprite sprite;
-
-    Line()
-    {
-        spriteX=curve=x=y=z=0;
-    }
-
-//  void project(int camX,int camY,int camZ)
-//  {
-//    scale = camD/(z-camZ);
-//    X = (1 + scale*(x - camX)) * width/2;
-//    Y = (1 - scale*(y - camY)) * height/2;
-//    W = scale * roadW  * width/2;
-//  }
-
-    void drawSprite(RenderWindow &app)
-    {
-        Sprite s = sprite;
-        int w = s.getTextureRect().width;
-        int h = s.getTextureRect().height;
-
-        float destX = X + scale * spriteX * width/2;
-        float destY = Y + 4;
-        float destW  = w * W / 266;
-        float destH  = h * W / 266;
-
-        destX += destW * spriteX; //offsetX
-        destY += destH * (-1);    //offsetY
-
-        float clipH = destY+destH-clip;
-        if (clipH<0) clipH=0;
-
-        if (clipH>=destH) return;
-        s.setTextureRect(IntRect(0,0,w,h-h*clipH/destH));
-        s.setScale(destW/w,destH/h);
-        s.setPosition(destX, destY);
-        app.draw(s);
-    }
-};
-
 
 void drawQuad(RenderWindow &w, Color c, int x1, int y1, int x2, int y2)
 {
@@ -81,7 +41,7 @@ int main(void)
     RenderWindow app(VideoMode(width, height), "Car Game");
     app.setFramerateLimit(60);
 
-    std::vector<Line> lines;
+    Point playerPoint;
 
     while(app.isOpen())
     {
@@ -132,17 +92,17 @@ int main(void)
             return 1;
         }
 
-
         sf::Texture texture;
         texture.loadFromImage(img);
         sf::Sprite pCar;
-        pCar.setPosition(Vector2f(115, height-150));
+        if (Keyboard::isKeyPressed(Keyboard::Right)) {
+            playerPoint.x += 108;
+        } else if (Keyboard::isKeyPressed(Keyboard::Left)) {
+            playerPoint.x -= 108;
+        }
+        pCar.setPosition(Vector2f(playerPoint.x, playerPoint.y));
         pCar.setTexture(texture, true);
-
         app.draw(pCar);
-
-//        sf::Sprite pCar;
-//        pCar.
 
         app.display();
     }
