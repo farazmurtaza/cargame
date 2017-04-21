@@ -7,6 +7,8 @@
 #include <ctime>
 #include <cstdlib>
 
+#define noOfobs 200
+
 using namespace sf;
 int width = 800;
 int height = 600;
@@ -14,8 +16,14 @@ sf::Color gray(105,105,105);
 int in[6] = {0,100,200,300,400,500};
 int velocity = 3;
 int trackW = 90, segW = 12;
-int obsP[12] = {0,0,0,0,0,0,0,0,0,0,0,0};
+int obsP[noOfobs];
 sf::Clock c;
+
+void init (int *obs) {
+    for (int i=0; i<noOfobs; i++) {
+        obs[i] = 0;
+    }
+}
 
 int my_rand()
 {
@@ -117,12 +125,13 @@ int temp=0;
 
 int main(void)
 {
+    init(obsP);
     RenderWindow app(VideoMode(width, height), "Car Game");
     app.setFramerateLimit(60);
     app.setKeyRepeatEnabled(false);
 
     PlayerCar pCar;
-	ObstacleCar Enemy1[12];
+	ObstacleCar Enemy1[noOfobs];
 
 	// Score part starts here
     sf::Font font;
@@ -189,18 +198,18 @@ int main(void)
 
 		if (check <= 0) {
 			obsP[temp] = 1;
-			if (temp < 12) {
+			if (temp < noOfobs) {
 				temp++;
 			}
 			else {
-				temp = temp % 12;
+				temp = temp % noOfobs;
 				temp++;
 			}
 			check=60;
 		}
 		check--;
 		int tempy,tempx;
-		for (int aa = 0;aa < 12;aa++) {
+		for (int aa = 0;aa < noOfobs;aa++) {
 			if (obsP[aa] == 1) {
 				tempy=Enemy1[aa].getY();
 				if (tempy > 600) {
@@ -211,13 +220,13 @@ int main(void)
 			}
 		}
 
-		for (int aa = 0;aa < 12;aa++) {
+		for (int aa = 0;aa < noOfobs;aa++) {
 			if (obsP[aa] == 1) {
 				Enemy1[aa].move();
 			}
 		}
 
-		for (int aa = 0;aa < 12;aa++) {
+		for (int aa = 0;aa < noOfobs;aa++) {
 			if (obsP[aa] == 1) {
 				app.draw(Enemy1[aa].spr);
 			}
