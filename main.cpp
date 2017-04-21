@@ -1,42 +1,40 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <iostream>
-#include <cstdlib>
 #include <sstream>
 #include <string>
+#include <random>
+#include <ctime>
+#include <cstdlib>
 
 using namespace sf;
 int width = 800;
 int height = 600;
 sf::Color gray(105,105,105);
 int in[6] = {0,100,200,300,400,500};
-int velocity = 5;
+int velocity = 3;
 int trackW = 90, segW = 12;
-int obsP[6] = {0,0,0,0,0,0};
+int obsP[12] = {0,0,0,0,0,0,0,0,0,0,0,0};
 sf::Clock c;
+
+int my_rand()
+{
+	static std::mt19937 rng(std::time(nullptr));
+	static std::uniform_int_distribution<int> distrib(0, 5);
+	return distrib(rng);
+}
 
 class Car {
     private:
-        int x;
-        int y;
+
     public:
+		int x;
+		int y;
         sf::Texture tex;
         sf::Sprite spr;
         Car(int x, int y) {
             this->x = x;
             this->y = y;
-        }
-        void moveRight() {
-            if (x < 640) {
-                x += 10;
-                spr.setPosition(x, y);
-            }
-        }
-        void moveLeft() {
-            if (x >= 110) {
-                x -= 10;
-                spr.setPosition(x, y);
-            }
         }
         void setX(int x) {
             this->x = x;
@@ -63,21 +61,37 @@ class PlayerCar: public Car {
             spr.setTexture(tex, true);
             spr.setPosition(x, y);
         }
+        void moveRight() {
+            if (x < 640) {
+                x += 6;
+                spr.setPosition(x, y);
+            }
+        }
+        void moveLeft() {
+            if (x >= 110) {
+                x -= 6;
+                spr.setPosition(x, y);
+            }
+        }
 };
 
 class ObstacleCar: public Car {
     public:
-        ObstacleCar(int x=115, int y=100, int t=0): Car(x,y) {
+        ObstacleCar(int x=115, int y=0): Car(x, y) {
+            int type = my_rand()+1;
             std::stringstream ss;
-            ss << t;
+            ss << type;
             tex.loadFromFile("resources/"+ss.str()+".png");
             spr.setTexture(tex, true);
-            setxy(x, y);
+            x=((my_rand()+1)*110);
+            setxy(x,y);
             spr.setPosition(x, y);
         }
-        void move() {
-            setY(getY() + velocity);
-        }
+
+		void move() {
+			y = y + velocity;
+			spr.setPosition(x, y);
+		}
 };
 
 void moveSeg(int &y) {
@@ -98,19 +112,19 @@ void drawQuad(RenderWindow &w, Color c, int x1, int y1, int x2, int y2)
     w.draw(shape);
 }
 
+int check = 60;
+int temp=0;
+
 int main(void)
 {
-    srand (time(NULL));
     RenderWindow app(VideoMode(width, height), "Car Game");
     app.setFramerateLimit(60);
     app.setKeyRepeatEnabled(false);
 
-    // Instantiate player's car
     PlayerCar pCar;
+	ObstacleCar Enemy1[12];
 
-    // Instantiate pointer for obstacle car
-
-    // Score show Start
+	// Score part starts here
     sf::Font font;
     if (!font.loadFromFile("resources/arial.ttf"))
     {
@@ -122,8 +136,7 @@ int main(void)
     text.setStyle(sf::Text::Bold | sf::Text::Underlined);
     text.setFillColor(sf::Color::White);
     text.setPosition(345,10);
-
-    // Score show End
+    // Score part ends here
 
     while(app.isOpen() && !Keyboard::isKeyPressed(Keyboard::Escape))
     {
@@ -173,11 +186,49 @@ int main(void)
         } else if (Keyboard::isKeyPressed(Keyboard::Left)) {
             pCar.moveLeft();
         }
+
+		if (check <= 0) {
+			obsP[temp] = 1;
+			if (temp < 12) {
+				temp++;
+			}
+			else {
+				temp = temp % 12;
+				temp++;
+			}
+			check=60;
+		}
+		check--;
+		int tempy,tempx;
+		for (int aa = 0;aa < 12;aa++) {
+			if (obsP[aa] == 1) {
+				tempy=Enemy1[aa].getY();
+				if (tempy > 600) {
+					obsP[aa] = 0;
+					tempx = (my_rand()+1) * 100;
+					Enemy1[aa].setxy(tempx, 0);
+				}
+			}
+		}
+
+		for (int aa = 0;aa < 12;aa++) {
+			if (obsP[aa] == 1) {
+				Enemy1[aa].move();
+			}
+		}
+
+		for (int aa = 0;aa < 12;aa++) {
+			if (obsP[aa] == 1) {
+				app.draw(Enemy1[aa].spr);
+			}
+		}
+
         app.draw(pCar.spr);
         sf::Time t = c.getElapsedTime();
-        std::stringstream ss;
-        ss << (int)t.asSeconds();
-        text.setString("Score: "+ss.str());
+        std::stringstream ss2;
+        ss2 << (int)t.asSeconds();
+        std::cout<<t.asSeconds()<<std::endl;
+        text.setString("Score: "+ss2.str());
         app.draw(text);
         app.display();
     }
