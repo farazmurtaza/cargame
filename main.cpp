@@ -162,35 +162,35 @@ int main(void)
 			}
 		}
 		app.clear();
-		drawQuad(app, Color::Green, 100, 0, 700, height);
+		drawQuad(app, gray, 100, 0, 700, height);
 
 		for (int i = 0; i<5; i++) {
-			drawQuad(app, gray, 100 + trackW + ((trackW + segW)*i), in[0], 100 + trackW + segW + ((trackW + segW)*i), in[0] + 50);
+			drawQuad(app, sf::Color::White, 100 + trackW + ((trackW + segW)*i), in[0], 100 + trackW + segW + ((trackW + segW)*i), in[0] + 50);
 		}
 		moveSeg(in[0]);
 
 		for (int i = 0; i<5; i++) {
-			drawQuad(app, gray, 100 + trackW + ((trackW + segW)*i), in[1], 100 + trackW + segW + ((trackW + segW)*i), in[1] + 50);
+			drawQuad(app, sf::Color::White, 100 + trackW + ((trackW + segW)*i), in[1], 100 + trackW + segW + ((trackW + segW)*i), in[1] + 50);
 		}
 		moveSeg(in[1]);
 
 		for (int i = 0; i<5; i++) {
-			drawQuad(app, gray, 100 + trackW + ((trackW + segW)*i), in[2], 100 + trackW + segW + ((trackW + segW)*i), in[2] + 50);
+			drawQuad(app, sf::Color::White, 100 + trackW + ((trackW + segW)*i), in[2], 100 + trackW + segW + ((trackW + segW)*i), in[2] + 50);
 		}
 		moveSeg(in[2]);
 
 		for (int i = 0; i<5; i++) {
-			drawQuad(app, gray, 100 + trackW + ((trackW + segW)*i), in[3], 100 + trackW + segW + ((trackW + segW)*i), in[3] + 50);
+			drawQuad(app, sf::Color::White, 100 + trackW + ((trackW + segW)*i), in[3], 100 + trackW + segW + ((trackW + segW)*i), in[3] + 50);
 		}
 		moveSeg(in[3]);
 
 		for (int i = 0; i<5; i++) {
-			drawQuad(app, gray, 100 + trackW + ((trackW + segW)*i), in[4], 100 + trackW + segW + ((trackW + segW)*i), in[4] + 50);
+			drawQuad(app, sf::Color::White, 100 + trackW + ((trackW + segW)*i), in[4], 100 + trackW + segW + ((trackW + segW)*i), in[4] + 50);
 		}
 		moveSeg(in[4]);
 
 		for (int i = 0; i<5; i++) {
-			drawQuad(app, gray, 100 + trackW + ((trackW + segW)*i), in[5], 100 + trackW + segW + ((trackW + segW)*i), in[5] + 50);
+			drawQuad(app, sf::Color::White, 100 + trackW + ((trackW + segW)*i), in[5], 100 + trackW + segW + ((trackW + segW)*i), in[5] + 50);
 		}
 		moveSeg(in[5]);
 
@@ -224,7 +224,7 @@ int main(void)
 				}
 			}
 		}
-		
+
 		//CHECK COLLISION
 
 		for (int aa = 0;aa < noOfobs;aa++) {
@@ -263,7 +263,7 @@ int main(void)
 					}
 				}
 			}
-		}	
+		}
 		////
 
 		for (int aa = 0;aa < noOfobs;aa++) {
@@ -283,7 +283,7 @@ int main(void)
 		std::stringstream ss2;
 		ss2 << (int)t.asSeconds();
 		std::cout << t.asSeconds() << std::endl;
-	
+
 		if (collision == 1) {
 			text.setCharacterSize(48);
 			text.setPosition(240, 250);
