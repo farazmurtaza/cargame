@@ -100,7 +100,7 @@ class ObstacleCar: public Car {
         }
 
 		void move() {
-			y = y + velocity;
+			y = y + 1.5*velocity;
 			spr.setPosition(x, y);
 		}
 };
