@@ -7,9 +7,11 @@
 #include <ctime>
 #include <cstdlib>
 
+using namespace sf;
+
+// Number of objects of obstacle cars to be spawned
 #define noOfobs 200
 
-using namespace sf;
 int width = 800;
 int height = 600;
 sf::Color gray(105,105,105);
@@ -19,9 +21,10 @@ int trackW = 90, segW = 12;
 int obsP[noOfobs];
 sf::Clock c;
 
-void init (int *obs) {
+// Initialize all obstacle cars' objects to 0
+void init () {
     for (int i=0; i<noOfobs; i++) {
-        obs[i] = 0;
+        obsP[i] = 0;
     }
 }
 
@@ -125,7 +128,7 @@ int temp=0;
 
 int main(void)
 {
-    init(obsP);
+    init();
     RenderWindow app(VideoMode(width, height), "Car Game");
     app.setFramerateLimit(60);
     app.setKeyRepeatEnabled(false);
