@@ -197,7 +197,8 @@ int main(void)
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Left)) {
 			pCar.moveLeft();
-		} else if (Keyboard::isKeyPressed(Keyboard::Up)) {
+		}
+		if (Keyboard::isKeyPressed(Keyboard::Up)) {
 		    accelerate = true;
             velocity+=3;
 		}
