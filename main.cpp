@@ -2,10 +2,6 @@
 #include <SFML/Audio.hpp>
 #include <iostream>
 #include <sstream>
-#include <string>
-#include <random>
-#include <ctime>
-#include <cstdlib>
 
 using namespace sf;
 
@@ -20,6 +16,7 @@ int velocity = 3;
 int trackW = 90, segW = 12;
 int obsP[noOfobs];
 sf::Clock c;
+bool accelerate = false;
 
 // Initialize all obstacle cars' objects to 0
 void init() {
@@ -125,7 +122,8 @@ void drawQuad(RenderWindow &w, Color c, int x1, int y1, int x2, int y2)
 
 int check = 60;
 int temp = 0;
-int ptempx, ptempy, collision = 0;
+int ptempx, ptempy;
+bool collision = false;
 
 int main(void)
 {
@@ -199,6 +197,9 @@ int main(void)
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Left)) {
 			pCar.moveLeft();
+		} else if (Keyboard::isKeyPressed(Keyboard::Up)) {
+		    accelerate = true;
+            velocity+=3;
 		}
 
 		if (check <= 0) {
@@ -238,12 +239,12 @@ int main(void)
 					if ((tempx - ptempx) < 50) {
 						if (tempy > ptempy) {
 							if ((tempy - ptempy) < 100) {
-								collision = 1;
+								collision = true;
 							}
 						}
 						else {
 							if ((ptempy - tempy) < 100) {
-								collision = 1;
+								collision = true;
 							}
 						}
 					}
@@ -252,12 +253,12 @@ int main(void)
 					if ((ptempx - tempx) < 45) {
 						if (tempy > ptempy) {
 							if ((tempy - ptempy) < 100) {
-								collision = 1;
+								collision = true;
 							}
 						}
 						else {
 							if ((ptempy - tempy) < 100) {
-								collision = 1;
+								collision = true;
 							}
 						}
 					}
@@ -278,22 +279,27 @@ int main(void)
 			}
 		}
 
-		app.draw(pCar.spr);
+
 		sf::Time t = c.getElapsedTime();
 		std::stringstream ss2;
 		ss2 << (int)t.asSeconds();
 		std::cout << t.asSeconds() << std::endl;
 
-		if (collision == 1) {
+		if (collision) {
 			text.setCharacterSize(48);
 			text.setPosition(240, 250);
 			text.setString("GAME OVER");
 		}
 		else {
 			text.setString("Score: " + ss2.str());
+			app.draw(pCar.spr);
 		}
 		app.draw(text);
 		app.display();
+		if (accelerate) {
+            velocity -= 3;
+            accelerate = false;
+		}
 	}
 	return 0;
 }

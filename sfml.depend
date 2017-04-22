@@ -9,3 +9,9 @@
 	<ctime>
 	<cstdlib>
 
+1492840838 source:e:\dev\cargame\main.cpp
+	<SFML/Graphics.hpp>
+	<SFML/Audio.hpp>
+	<iostream>
+	<sstream>
+
