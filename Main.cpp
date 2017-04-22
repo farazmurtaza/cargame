@@ -162,35 +162,12 @@ int main(void)
 		app.clear();
 		drawQuad(app, gray, 100, 0, 700, height);
 
-		for (int i = 0; i<5; i++) {
-			drawQuad(app, sf::Color::White, 100 + trackW + ((trackW + segW)*i), in[0], 100 + trackW + segW + ((trackW + segW)*i), in[0] + 50);
+		for (int j=0; j<6; j++) {
+			for (int i=0; i<5; i++) {
+				drawQuad(app, sf::Color::White, 100 + trackW + ((trackW + segW)*i), in[j], 100 + trackW + segW + ((trackW + segW)*i), in[j] + 50);
+			}
+			moveSeg(in[j]);
 		}
-		moveSeg(in[0]);
-
-		for (int i = 0; i<5; i++) {
-			drawQuad(app, sf::Color::White, 100 + trackW + ((trackW + segW)*i), in[1], 100 + trackW + segW + ((trackW + segW)*i), in[1] + 50);
-		}
-		moveSeg(in[1]);
-
-		for (int i = 0; i<5; i++) {
-			drawQuad(app, sf::Color::White, 100 + trackW + ((trackW + segW)*i), in[2], 100 + trackW + segW + ((trackW + segW)*i), in[2] + 50);
-		}
-		moveSeg(in[2]);
-
-		for (int i = 0; i<5; i++) {
-			drawQuad(app, sf::Color::White, 100 + trackW + ((trackW + segW)*i), in[3], 100 + trackW + segW + ((trackW + segW)*i), in[3] + 50);
-		}
-		moveSeg(in[3]);
-
-		for (int i = 0; i<5; i++) {
-			drawQuad(app, sf::Color::White, 100 + trackW + ((trackW + segW)*i), in[4], 100 + trackW + segW + ((trackW + segW)*i), in[4] + 50);
-		}
-		moveSeg(in[4]);
-
-		for (int i = 0; i<5; i++) {
-			drawQuad(app, sf::Color::White, 100 + trackW + ((trackW + segW)*i), in[5], 100 + trackW + segW + ((trackW + segW)*i), in[5] + 50);
-		}
-		moveSeg(in[5]);
 
 		if (Keyboard::isKeyPressed(Keyboard::Right)) {
 			pCar.moveRight();
