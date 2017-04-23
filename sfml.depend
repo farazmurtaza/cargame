@@ -9,12 +9,17 @@
 	<ctime>
 	<cstdlib>
 
+<<<<<<< HEAD
 1492970608 source:/home/saad/cargame/main.cpp
+=======
+1492840838 source:e:\dev\cargame\main.cpp
+>>>>>>> 791de3a52505111382762ed959656077df335638
 	<SFML/Graphics.hpp>
 	<SFML/Audio.hpp>
 	<iostream>
 	<sstream>
 
+<<<<<<< HEAD
 1491304768 /usr/local/include//SFML/Graphics.hpp
 	<SFML/Window.hpp>
 	<SFML/Graphics/BlendMode.hpp>
@@ -507,3 +512,5 @@
 	<SFML/Audio/Export.hpp>
 	<string>
 
+=======
+>>>>>>> 791de3a52505111382762ed959656077df335638

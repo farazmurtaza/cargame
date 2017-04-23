@@ -179,7 +179,7 @@ int main(void)
 		    accelerate = true;
             velocity+=3;
 		}
-        int vUp;
+
 		if (check <= 0) {
 			obsP[temp] = 1;
 			if (temp < noOfobs) {
@@ -189,8 +189,7 @@ int main(void)
 				temp = temp % noOfobs;
 				temp++;
 			}
-			// Decrease car spawn time after every 5 seconds
-			check = 60 - (vUp * 5);
+			check = 60;
 		}
 		check--;
 		int tempy, tempx;
@@ -279,10 +278,6 @@ int main(void)
             velocity -= 3;
             accelerate = false;
 		}
-		// Increase velocity
-		velocity = 3;
-		vUp = (int)t.asSeconds() / 5;
-		velocity = 3 + vUp;
 	}
 	return 0;
 }
