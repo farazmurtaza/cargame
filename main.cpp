@@ -17,6 +17,7 @@ int trackW = 90, segW = 12;
 int obsP[noOfobs];
 sf::Clock c;
 bool accelerate = false;
+int lastcartrack=0;
 
 // Initialize all obstacle cars' objects to 0
 void init() {
@@ -25,19 +26,19 @@ void init() {
 	}
 }
 
-int my_rand()
+// Returns int a random number from low to up inclusive
+int my_rand(int low, int up)
 {
 	static std::mt19937 rng(std::time(nullptr));
-	static std::uniform_int_distribution<int> distrib(0, 5);
+	static std::uniform_int_distribution<int> distrib(low, up);
 	return distrib(rng);
 }
 
 class Car {
-private:
-
-public:
-	int x;
+protected:
+    int x;
 	int y;
+public:
 	sf::Texture tex;
 	sf::Sprite spr;
 	Car(int x, int y) {
@@ -86,12 +87,18 @@ public:
 class ObstacleCar : public Car {
 public:
 	ObstacleCar(int x = 115, int y = 0) : Car(x, y) {
-		int type = my_rand() + 1;
+	    int type = my_rand(1, 6);
 		std::stringstream ss;
 		ss << type;
 		tex.loadFromFile("resources/" + ss.str() + ".png");
 		spr.setTexture(tex, true);
-		x = ((my_rand() + 1) * 110);
+		x = my_rand(1,6);
+		// Make sure that currently spawned car is not on same track as last one
+	    do {
+            x = my_rand(1,6);
+	    } while (x == lastcartrack);
+	    lastcartrack = x;
+	    x = x * 110;
 		setxy(x, y);
 		spr.setPosition(x, y);
 	}
@@ -196,17 +203,17 @@ int main(void)
 		int tempy, tempx;
 		for (int aa = 0;aa < noOfobs;aa++) {
 			if (obsP[aa] == 1) {
-				tempy = Enemy1[aa].getY();
-				if (tempy > 600) {
+				if (Enemy1[aa].getY() > 600) {
 					obsP[aa] = 0;
-					tempx = (my_rand() + 1) * 100;
+					do {
+                        tempx = my_rand(1,6);
+					} while (tempx == lastcartrack);
 					Enemy1[aa].setxy(tempx, 0);
 				}
 			}
 		}
 
 		//CHECK COLLISION
-
 		for (int aa = 0;aa < noOfobs;aa++) {
 			if (obsP[aa] == 1) {
 				tempx = Enemy1[aa].getX();
