@@ -82,6 +82,18 @@ public:
 			spr.setPosition(x, y);
 		}
 	}
+	void moveUp() {
+		if (y > 6) {
+			y -= 2;
+			spr.setPosition(x, y);
+		}
+	}
+	void moveDown() {
+		if (y < 494) {
+			y += 2;
+			spr.setPosition(x, y);
+		}
+	}
 };
 
 class ObstacleCar : public Car {
@@ -92,7 +104,6 @@ public:
 		ss << type;
 		tex.loadFromFile("resources/" + ss.str() + ".png");
 		spr.setTexture(tex, true);
-		x = my_rand(1,6);
 		// Make sure that currently spawned car is not on same track as last one
 	    do {
             x = my_rand(1,6);
@@ -183,8 +194,9 @@ int main(void)
 			pCar.moveLeft();
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Up)) {
-		    accelerate = true;
-            velocity+=3;
+            pCar.moveUp();
+		} else if (Keyboard::isKeyPressed(Keyboard::Down)) {
+		    pCar.moveDown();
 		}
         int vUp;
 		if (check <= 0) {
@@ -197,7 +209,7 @@ int main(void)
 				temp++;
 			}
 			// Decrease car spawn time after every 5 seconds
-			check = 60 - (vUp * 5);
+			check = 60 - (vUp * 2);
 		}
 		check--;
 		int tempy, tempx;
@@ -251,27 +263,20 @@ int main(void)
 				}
 			}
 		}
-		////
 
 		for (int aa = 0;aa < noOfobs;aa++) {
 			if (obsP[aa] == 1) {
 				Enemy1[aa].move();
 			}
 		}
-
-		for (int aa = 0;aa < noOfobs;aa++) {
-			if (obsP[aa] == 1) {
-				app.draw(Enemy1[aa].spr);
-			}
-		}
-
-
 		sf::Time t = c.getElapsedTime();
 		std::stringstream ss2;
 		ss2 << (int)t.asSeconds();
 		std::cout << t.asSeconds() << std::endl;
 
 		if (collision) {
+            velocity = 0;
+            std::cout<<velocity<<std::endl;
 			text.setCharacterSize(48);
 			text.setPosition(240, 250);
 			text.setString("GAME OVER");
@@ -280,16 +285,22 @@ int main(void)
 			text.setString("Score: " + ss2.str());
 			app.draw(pCar.spr);
 		}
-		app.draw(text);
-		app.display();
-		if (accelerate) {
-            velocity -= 3;
-            accelerate = false;
-		}
+
 		// Increase velocity
-		velocity = 3;
-		vUp = (int)t.asSeconds() / 5;
-		velocity = 3 + vUp;
+		if (velocity != 0) {
+            for (int aa = 0;aa < noOfobs;aa++) {
+                if (obsP[aa] == 1) {
+                    app.draw(Enemy1[aa].spr);
+                }
+            }
+
+            velocity = 3;
+            vUp = (int)t.asSeconds() / 8;
+            velocity = 3 + vUp;
+		}
+
+        app.draw(text);
+		app.display();
 	}
 	return 0;
 }
