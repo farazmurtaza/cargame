@@ -18,6 +18,7 @@ int obsP[noOfobs];
 sf::Clock c;
 bool accelerate = false;
 int lastcartrack=0;
+bool started = false;
 
 // Initialize all obstacle cars' objects to 0
 void init() {
@@ -167,152 +168,177 @@ int main(void)
 	text.setPosition(345, 10);
 	// Score part ends here
 
+	Event e;
+
 	while (app.isOpen() && !Keyboard::isKeyPressed(Keyboard::Escape))
 	{
-		Event e;
-		while (app.pollEvent(e))
-		{
-			if (e.type == Event::Closed)
-			{
-				app.close();
-			}
-		}
-		app.clear();
-		drawQuad(app, gray, 90, 0, 710, height);
+		if (!started) {
+            while (app.pollEvent(e))
+            {
+                if (e.type == Event::Closed)
+                {
+                    app.close();
+                }
+            }
+            sf::Texture startTex;
+            if (!startTex.loadFromFile("resources/startpage.jpg")) {
+                return 1;
+            }
+            sf::Sprite startSpr;
+            startSpr.setTexture(startTex, true);
+            startSpr.setPosition(0,0);
+            app.draw(startSpr);
+            if (Keyboard::isKeyPressed(Keyboard::Return)) {
+                started = true;
+            }
+            app.display();
+            c.restart();
 
-		sf::Texture grassTex;
-		if (!grassTex.loadFromFile("resources/grass.jpg")) {
-            return 1;
-		}
-        sf::Sprite grassSpr1, grassSpr2;
-        grassSpr1.setTexture(grassTex, true);
-        grassSpr1.setPosition(-10, 0);
-        app.draw(grassSpr1);
-        grassSpr2.setTexture(grassTex, true);
-        grassSpr2.setPosition(710, 0);
-        app.draw(grassSpr2);
+		} else {
+            while (app.pollEvent(e))
+            {
+                if (e.type == Event::Closed)
+                {
+                    app.close();
+                }
+            }
+            app.clear();
+            drawQuad(app, gray, 90, 0, 710, height);
 
-		for (int j=0; j<6; j++) {
-			for (int i=0; i<5; i++) {
-				drawQuad(app, sf::Color::White, 100 + trackW + ((trackW + segW)*i), in[j], 100 + trackW + segW + ((trackW + segW)*i), in[j] + 50);
-			}
-			moveSeg(in[j]);
-		}
+            sf::Texture grassTex;
+            if (!grassTex.loadFromFile("resources/grass.jpg")) {
+                return 1;
+            }
+            sf::Sprite grassSpr1, grassSpr2;
+            grassSpr1.setTexture(grassTex, true);
+            grassSpr1.setPosition(-10, 0);
+            app.draw(grassSpr1);
+            grassSpr2.setTexture(grassTex, true);
+            grassSpr2.setPosition(710, 0);
+            app.draw(grassSpr2);
 
-		if (Keyboard::isKeyPressed(Keyboard::Right)) {
-			pCar.moveRight();
-		}
-		else if (Keyboard::isKeyPressed(Keyboard::Left)) {
-			pCar.moveLeft();
-		}
-		if (Keyboard::isKeyPressed(Keyboard::Up)) {
-            pCar.moveUp();
-		} else if (Keyboard::isKeyPressed(Keyboard::Down)) {
-		    pCar.moveDown();
-		}
-        int vUp;
-		if (check <= 0) {
-			obsP[temp] = 1;
-			if (temp < noOfobs) {
-				temp++;
-			}
-			else {
-				temp = temp % noOfobs;
-				temp++;
-			}
-			// Decrease car spawn time after every 5 seconds
-			check = 60 - (vUp * 2);
-		}
-		check--;
-		int tempy, tempx;
-		for (int aa = 0;aa < noOfobs;aa++) {
-			if (obsP[aa] == 1) {
-				if (Enemy1[aa].getY() > 600) {
-					obsP[aa] = 0;
-					do {
-                        tempx = my_rand(1,6);
-					} while (tempx == lastcartrack);
-					Enemy1[aa].setxy(tempx, 0);
-				}
-			}
-		}
+            for (int j=0; j<6; j++) {
+                for (int i=0; i<5; i++) {
+                    drawQuad(app, sf::Color::White, 100 + trackW + ((trackW + segW)*i), in[j], 100 + trackW + segW + ((trackW + segW)*i), in[j] + 50);
+                }
+                moveSeg(in[j]);
+            }
 
-		//CHECK COLLISION
-		for (int aa = 0;aa < noOfobs;aa++) {
-			if (obsP[aa] == 1) {
-				tempx = Enemy1[aa].getX();
-				tempy = Enemy1[aa].getY();
-				ptempx = pCar.getX();
-				ptempy = pCar.getY();
-
-				if (tempx > ptempx) {
-					if ((tempx - ptempx) < 50) {
-						if (tempy > ptempy) {
-							if ((tempy - ptempy) < 100) {
-								collision = true;
-							}
-						}
-						else {
-							if ((ptempy - tempy) < 100) {
-								collision = true;
-							}
-						}
-					}
-				}
-				else {
-					if ((ptempx - tempx) < 45) {
-						if (tempy > ptempy) {
-							if ((tempy - ptempy) < 100) {
-								collision = true;
-							}
-						}
-						else {
-							if ((ptempy - tempy) < 100) {
-								collision = true;
-							}
-						}
-					}
-				}
-			}
-		}
-
-		for (int aa = 0;aa < noOfobs;aa++) {
-			if (obsP[aa] == 1) {
-				Enemy1[aa].move();
-			}
-		}
-		sf::Time t = c.getElapsedTime();
-		std::stringstream ss2;
-		ss2 << (int)t.asSeconds();
-		std::cout << t.asSeconds() << std::endl;
-
-		if (collision) {
-            velocity = 0;
-            std::cout<<velocity<<std::endl;
-			text.setCharacterSize(48);
-			text.setPosition(240, 250);
-			text.setString("GAME OVER");
-		}
-		else {
-			text.setString("Score: " + ss2.str());
-			app.draw(pCar.spr);
-		}
-
-		// Increase velocity
-		if (velocity != 0) {
+            if (Keyboard::isKeyPressed(Keyboard::Right)) {
+                pCar.moveRight();
+            }
+            else if (Keyboard::isKeyPressed(Keyboard::Left)) {
+                pCar.moveLeft();
+            }
+            if (Keyboard::isKeyPressed(Keyboard::Up)) {
+                pCar.moveUp();
+            } else if (Keyboard::isKeyPressed(Keyboard::Down)) {
+                pCar.moveDown();
+            }
+            int vUp;
+            if (check <= 0) {
+                obsP[temp] = 1;
+                if (temp < noOfobs) {
+                    temp++;
+                }
+                else {
+                    temp = temp % noOfobs;
+                    temp++;
+                }
+                // Decrease car spawn time after every 5 seconds
+                check = 60 - (vUp * 2);
+            }
+            check--;
+            int tempy, tempx;
             for (int aa = 0;aa < noOfobs;aa++) {
                 if (obsP[aa] == 1) {
-                    app.draw(Enemy1[aa].spr);
+                    if (Enemy1[aa].getY() > 600) {
+                        obsP[aa] = 0;
+                        do {
+                            tempx = my_rand(1,6);
+                        } while (tempx == lastcartrack);
+                        Enemy1[aa].setxy(tempx, 0);
+                    }
                 }
             }
 
-            velocity = 3;
-            vUp = (int)t.asSeconds() / 8;
-            velocity = 3 + vUp;
-		}
+            //CHECK COLLISION
+            for (int aa = 0;aa < noOfobs;aa++) {
+                if (obsP[aa] == 1) {
+                    tempx = Enemy1[aa].getX();
+                    tempy = Enemy1[aa].getY();
+                    ptempx = pCar.getX();
+                    ptempy = pCar.getY();
 
-        app.draw(text);
-		app.display();
+                    if (tempx > ptempx) {
+                        if ((tempx - ptempx) < 50) {
+                            if (tempy > ptempy) {
+                                if ((tempy - ptempy) < 100) {
+                                    collision = true;
+                                }
+                            }
+                            else {
+                                if ((ptempy - tempy) < 100) {
+                                    collision = true;
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        if ((ptempx - tempx) < 45) {
+                            if (tempy > ptempy) {
+                                if ((tempy - ptempy) < 100) {
+                                    collision = true;
+                                }
+                            }
+                            else {
+                                if ((ptempy - tempy) < 100) {
+                                    collision = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            for (int aa = 0;aa < noOfobs;aa++) {
+                if (obsP[aa] == 1) {
+                    Enemy1[aa].move();
+                }
+            }
+            sf::Time t = c.getElapsedTime();
+            std::stringstream ss2;
+            ss2 << (int)t.asSeconds();
+            std::cout << t.asSeconds() << std::endl;
+
+            if (collision) {
+                velocity = 0;
+                std::cout<<velocity<<std::endl;
+                text.setCharacterSize(48);
+                text.setPosition(240, 250);
+                text.setString("GAME OVER");
+            }
+            else {
+                text.setString("Score: " + ss2.str());
+                app.draw(pCar.spr);
+            }
+
+            // Increase velocity
+            if (velocity != 0) {
+                for (int aa = 0;aa < noOfobs;aa++) {
+                    if (obsP[aa] == 1) {
+                        app.draw(Enemy1[aa].spr);
+                    }
+                }
+
+                velocity = 3;
+                vUp = (int)t.asSeconds() / 8;
+                velocity = 3 + vUp;
+            }
+
+            app.draw(text);
+            app.display();
+		}
 	}
 	return 0;
 }
