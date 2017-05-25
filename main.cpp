@@ -1,6 +1,5 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
-#include <iostream>
 #include <sstream>
 
 using namespace sf;
@@ -143,7 +142,7 @@ void drawQuad(RenderWindow &w, Color c, int x1, int y1, int x2, int y2)
 int check = 60;
 int temp = 0;
 int ptempx, ptempy;
-bool collision = false;
+bool collision = false, collisionNow = false;
 
 int main(void)
 {
@@ -179,6 +178,15 @@ int main(void)
     grassSpr1.setTexture(grassTex, true);
     grassSpr1.setPosition(-10, 0);
     grassSpr2.setTexture(grassTex, true);
+
+    // Sound
+    sf::SoundBuffer crashBuffer;
+    if (!crashBuffer.loadFromFile("resources/carcrash.wav")) {
+        return 1;
+    }
+
+    sf::Sound crashSound;
+    crashSound.setBuffer(crashBuffer);
 
 	while (app.isOpen() && !Keyboard::isKeyPressed(Keyboard::Escape))
 	{
@@ -276,31 +284,42 @@ int main(void)
                         if ((tempx - ptempx) < 50) {
                             if (tempy > ptempy) {
                                 if ((tempy - ptempy) < 100) {
+                                    if (!collision)
+                                        collisionNow = true;
                                     collision = true;
+
                                 }
-                            }
-                            else {
+                            } else {
                                 if ((ptempy - tempy) < 100) {
+                                    if (!collision)
+                                        collisionNow = true;
                                     collision = true;
                                 }
                             }
                         }
-                    }
-                    else {
+                    } else {
                         if ((ptempx - tempx) < 45) {
                             if (tempy > ptempy) {
                                 if ((tempy - ptempy) < 100) {
+                                    if (!collision)
+                                        collisionNow = true;
                                     collision = true;
                                 }
                             }
                             else {
                                 if ((ptempy - tempy) < 100) {
+                                    if (!collision)
+                                        collisionNow = true;
                                     collision = true;
                                 }
                             }
                         }
                     }
                 }
+            }
+            if (collisionNow && collision) {
+                crashSound.play();
+                collisionNow = false;
             }
 
             for (int aa = 0;aa < noOfobs;aa++) {
@@ -310,8 +329,6 @@ int main(void)
             }
             sf::Time t = c.getElapsedTime();
             std::stringstream ss2;
-
-            std::cout << t.asSeconds() << std::endl;
 
             if (collision) {
                 velocity = 0;
@@ -323,7 +340,6 @@ int main(void)
                 sf::Sprite gOverSpr;
                 gOverSpr.setTexture(gOverTex, true);
                 app.draw(gOverSpr);
-//                std::cout<<velocity<<std::endl;
                 text.setCharacterSize(48);
 
                 //center text
@@ -342,7 +358,7 @@ int main(void)
 
             // Increase velocity
             if (velocity != 0) {
-                for (int aa = 0;aa < noOfobs;aa++) {
+                for (int aa = 0; aa < noOfobs; aa++) {
                     if (obsP[aa] == 1) {
                         app.draw(Enemy1[aa].spr);
                     }

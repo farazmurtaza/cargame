@@ -17,10 +17,11 @@
 					<Add directory="/usr/local/include/" />
 				</Compiler>
 				<Linker>
-					<Add library="sfml-audio" />
-					<Add library="sfml-graphics" />
-					<Add library="sfml-window" />
-					<Add library="sfml-system" />
+					<Add option="-Xlinker -Bstatic" />
+					<Add option="-lsfml-audio" />
+					<Add option="-lsfml-graphics" />
+					<Add option="-lsfml-window" />
+					<Add option="-lsfml-system" />
 					<Add directory="/usr/local/lib/" />
 				</Linker>
 			</Target>
