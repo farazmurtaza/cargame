@@ -171,6 +171,15 @@ int main(void)
 
 	Event e;
 
+    sf::Texture grassTex;
+    if (!grassTex.loadFromFile("resources/grass.jpg")) {
+        return 1;
+    }
+    sf::Sprite grassSpr1, grassSpr2;
+    grassSpr1.setTexture(grassTex, true);
+    grassSpr1.setPosition(-10, 0);
+    grassSpr2.setTexture(grassTex, true);
+
 	while (app.isOpen() && !Keyboard::isKeyPressed(Keyboard::Escape))
 	{
 		if (!started) {
@@ -206,16 +215,8 @@ int main(void)
             app.clear();
             drawQuad(app, gray, 90, 0, 710, height);
 
-            sf::Texture grassTex;
-            if (!grassTex.loadFromFile("resources/grass.jpg")) {
-                return 1;
-            }
-            sf::Sprite grassSpr1, grassSpr2;
-            grassSpr1.setTexture(grassTex, true);
-            grassSpr1.setPosition(-10, 0);
-            app.draw(grassSpr1);
-            grassSpr2.setTexture(grassTex, true);
             grassSpr2.setPosition(710, 0);
+            app.draw(grassSpr1);
             app.draw(grassSpr2);
 
             for (int j=0; j<6; j++) {
@@ -324,16 +325,19 @@ int main(void)
                 app.draw(gOverSpr);
 //                std::cout<<velocity<<std::endl;
                 text.setCharacterSize(48);
-                text.setPosition(240, 250);
+
+                //center text
+                sf::FloatRect textRect = text.getLocalBounds();
+                text.setOrigin(textRect.left + textRect.width/2.0f, textRect.top  + textRect.height/2.0f);
+                text.setPosition(sf::Vector2f(width/2.0f, height/2.0f));
+
                 ss2 << (int)score;
                 text.setString("Score: " + ss2.str());
-            }
-            else {
+            } else {
                 ss2 << (int)t.asSeconds();
                 text.setString("Score: " + ss2.str());
                 app.draw(pCar.spr);
                 score = t.asSeconds();
-
             }
 
             // Increase velocity
