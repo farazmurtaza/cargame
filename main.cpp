@@ -74,6 +74,7 @@ public:
 		this->x = x;
 		this->y = y;
 	}
+	virtual void move() = 0;
 	void setX(int x) {
 		this->x = x;
 	}
@@ -98,6 +99,8 @@ public:
 		tex.loadFromFile("resources/playercar.png");
 		spr.setTexture(tex, true);
 		spr.setPosition(x, y);
+	}
+	void move() {
 	}
 	void moveRight() {
 		if (x < 640) {
