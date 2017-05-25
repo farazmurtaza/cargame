@@ -7,12 +7,17 @@ using namespace sf;
 // Number of objects of obstacle cars to be spawned
 #define noOfobs 200
 
+// Width & Height of graphical window
 int width = 800;
 int height = 600;
 sf::Color gray(105, 105, 105);
+// Positions of tracks
 int in[6] = { 0,100,200,300,400,500 };
+// Velocity
 int velocity = 3;
+// Width of tracks & segments
 int trackW = 90, segW = 12;
+// Array to keep a track of which cars are on which track (0 if now spawned)
 int obsP[noOfobs];
 sf::Clock c;
 bool accelerate = false;
@@ -20,7 +25,12 @@ int lastcartrack=0;
 bool started = false;
 int score;
 
-// Initialize all obstacle cars' objects to 0
+int check = 60;
+int temp = 0;
+int ptempx, ptempy;
+bool collision = false, collisionNow = false;
+
+// Initialize all obstacle cars' positions to 0
 void init() {
 	for (int i = 0; i<noOfobs; i++) {
 		obsP[i] = 0;
@@ -33,6 +43,24 @@ int my_rand(int low, int up)
 	static std::mt19937 rng(std::time(nullptr));
 	static std::uniform_int_distribution<int> distrib(low, up);
 	return distrib(rng);
+}
+
+void moveSeg(int &y) {
+	y += velocity;
+	if (y>height) {
+		y -= height;
+	}
+}
+
+void drawQuad(RenderWindow &w, Color c, int x1, int y1, int x2, int y2)
+{
+	ConvexShape shape(4);
+	shape.setFillColor(c);
+	shape.setPoint(0, Vector2f(x1, y1));
+	shape.setPoint(1, Vector2f(x1, y2));
+	shape.setPoint(2, Vector2f(x2, y2));
+	shape.setPoint(3, Vector2f(x2, y1));
+	w.draw(shape);
 }
 
 class Car {
@@ -105,10 +133,12 @@ public:
 		ss << type;
 		tex.loadFromFile("resources/" + ss.str() + ".png");
 		spr.setTexture(tex, true);
+
 		// Make sure that currently spawned car is not on same track as last one
 	    do {
             x = my_rand(1,6);
 	    } while (x == lastcartrack);
+
 	    lastcartrack = x;
 	    x = x * 110;
 		setxy(x, y);
@@ -120,29 +150,6 @@ public:
 		spr.setPosition(x, y);
 	}
 };
-
-void moveSeg(int &y) {
-	y += velocity;
-	if (y>height) {
-		y -= height;
-	}
-}
-
-void drawQuad(RenderWindow &w, Color c, int x1, int y1, int x2, int y2)
-{
-	ConvexShape shape(4);
-	shape.setFillColor(c);
-	shape.setPoint(0, Vector2f(x1, y1));
-	shape.setPoint(1, Vector2f(x1, y2));
-	shape.setPoint(2, Vector2f(x2, y2));
-	shape.setPoint(3, Vector2f(x2, y1));
-	w.draw(shape);
-}
-
-int check = 60;
-int temp = 0;
-int ptempx, ptempy;
-bool collision = false, collisionNow = false;
 
 int main(void)
 {
