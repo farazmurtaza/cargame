@@ -178,7 +178,19 @@ int main(void)
 			}
 		}
 		app.clear();
-		drawQuad(app, gray, 100, 0, 700, height);
+		drawQuad(app, gray, 90, 0, 710, height);
+
+		sf::Texture grassTex;
+		if (!grassTex.loadFromFile("resources/grass.jpg")) {
+            return 1;
+		}
+        sf::Sprite grassSpr1, grassSpr2;
+        grassSpr1.setTexture(grassTex, true);
+        grassSpr1.setPosition(-10, 0);
+        app.draw(grassSpr1);
+        grassSpr2.setTexture(grassTex, true);
+        grassSpr2.setPosition(710, 0);
+        app.draw(grassSpr2);
 
 		for (int j=0; j<6; j++) {
 			for (int i=0; i<5; i++) {
