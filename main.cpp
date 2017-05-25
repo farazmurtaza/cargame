@@ -19,6 +19,7 @@ sf::Clock c;
 bool accelerate = false;
 int lastcartrack=0;
 bool started = false;
+int score;
 
 // Initialize all obstacle cars' objects to 0
 void init() {
@@ -308,19 +309,31 @@ int main(void)
             }
             sf::Time t = c.getElapsedTime();
             std::stringstream ss2;
-            ss2 << (int)t.asSeconds();
+
             std::cout << t.asSeconds() << std::endl;
 
             if (collision) {
                 velocity = 0;
-                std::cout<<velocity<<std::endl;
+                app.clear();
+                sf::Texture gOverTex;
+                if (!gOverTex.loadFromFile("resources/gameover.jpg")) {
+                    return 1;
+                }
+                sf::Sprite gOverSpr;
+                gOverSpr.setTexture(gOverTex, true);
+                app.draw(gOverSpr);
+//                std::cout<<velocity<<std::endl;
                 text.setCharacterSize(48);
                 text.setPosition(240, 250);
-                text.setString("GAME OVER");
+                ss2 << (int)score;
+                text.setString("Score: " + ss2.str());
             }
             else {
+                ss2 << (int)t.asSeconds();
                 text.setString("Score: " + ss2.str());
                 app.draw(pCar.spr);
+                score = t.asSeconds();
+
             }
 
             // Increase velocity
